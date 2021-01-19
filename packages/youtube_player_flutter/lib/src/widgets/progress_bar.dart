@@ -55,12 +55,16 @@ class ProgressBar extends StatefulWidget {
   ///
   /// Default is false.
   final bool isExpanded;
+  
+  /// Called whenever user has dragged this progress bar to change seek position.
+  final void Function() onSeekChanged;
 
   /// Creates [ProgressBar] widget.
   ProgressBar({
     this.controller,
     this.colors,
     this.isExpanded = false,
+    this.onSeekChanged,
   });
 
   @override
@@ -133,6 +137,7 @@ class _ProgressBarState extends State<ProgressBar> {
     final relative = _touchPoint.dx / box.size.width;
     _position = _controller.metadata.duration * relative;
     _controller.seekTo(_position, allowSeekAhead: false);
+    widget.onSeekChanged?.call();
   }
 
   void _dragEndActions() {
